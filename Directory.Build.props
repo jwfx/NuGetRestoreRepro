@@ -1,0 +1,22 @@
+<Project>
+
+  <PropertyGroup>
+	<!-- Workaround we tried to use to solve the "Object reference not set to an instance of an object." exception -->
+	<!--<RestoreUseLegacyDependencyResolver>true</RestoreUseLegacyDependencyResolver> -->
+  </PropertyGroup>
+
+  <!-- C++/CLI Projects: Required to make Manage NuGet packages work in Visual Studio -->
+  <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.vcxproj'">
+	<ProjectCapability Include="PackageReferences" />
+  </ItemGroup>
+
+  <!-- C++/CLI Projects: Enable PackageReference support (https://github.com/NuGet/NuGet.Client/pull/3145#issuecomment-888769783) -->
+  <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.vcxproj'">
+	<NuGetTargetMoniker Condition="'$(NuGetTargetMoniker)' == ''">native,Version=v0.0</NuGetTargetMoniker>
+	<!-- Mark all projects as PackageReference (even those having no references yet) -->
+	<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	<!-- Hide project incompatiblity warnings -->
+	<NoWarn>$(NoWarn);NU1701;NU1702</NoWarn>
+  </PropertyGroup>
+
+</Project>
